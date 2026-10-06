@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rajan Panchal · Data Analyst</title>
+<meta name="description" content="Rajan Panchal, Data Analyst in Vancouver. Power BI, SQL, Python and Azure for healthcare and business reporting.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --surface: #ffffff;
+    --text: #1c1d1f;
+    --muted: #63666b;
+    --faint: #9a9da2;
+    --line: #e7e4dd;
+    --accent: #1f6f5c;
+    --accent-soft: #e6f0ec;
+    --serif: "Newsreader", Georgia, serif;
+    --sans: "Inter", system-ui, -apple-system, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
+    --max: 1040px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141516; --surface: #1b1c1e; --text: #ececea; --muted: #a3a6aa;
+      --faint: #6f7277; --line: #2b2d30; --accent: #6cc3a8; --accent-soft: #1d2b27;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #141516; --surface: #1b1c1e; --text: #ececea; --muted: #a3a6aa;
+    --faint: #6f7277; --line: #2b2d30; --accent: #6cc3a8; --accent-soft: #1d2b27;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+  body {
+    background: var(--bg); color: var(--text);
+    font: 400 16px/1.65 var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+  /* Nav */
+  header.nav {
+    position: sticky; top: 0; z-index: 10;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid transparent;
+    transition: border-color .2s;
+  }
+  header.nav.scrolled { border-color: var(--line); }
+  .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .logo { font: 500 20px var(--serif); text-decoration: none; letter-spacing: -.01em; }
+  .logo span { color: var(--accent); }
+  .nav ul { display: flex; gap: 28px; list-style: none; align-items: center; }
+  .nav ul a { text-decoration: none; font-size: 14px; color: var(--muted); transition: color .15s; }
+  .nav ul a:hover { color: var(--text); }
+  .theme-btn {
+    background: none; border: 1px solid var(--line); color: var(--muted);
+    width: 34px; height: 34px; border-radius: 50%; cursor: pointer;
+    display: grid; place-items: center;
+  }
+  .theme-btn:hover { color: var(--text); }
+  .menu-btn { display: none; background: none; border: 0; color: var(--text); cursor: pointer; padding: 6px; }
+
+  /* Hero */
+  .hero { padding: 96px 0 72px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 56px; align-items: center; }
+  .eyebrow {
+    font: 400 13px var(--mono); color: var(--accent); letter-spacing: .02em;
+    display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px;
+  }
+  .eyebrow::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+  h1 { font: 400 clamp(40px, 6vw, 60px)/1.08 var(--serif); letter-spacing: -.02em; margin-bottom: 20px; }
+  h1 em { font-style: italic; color: var(--accent); }
+  .lede { font-size: 18px; color: var(--muted); max-width: 34em; margin-bottom: 32px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 11px 20px; border-radius: 8px; font-size: 15px; font-weight: 500;
+    text-decoration: none; border: 1px solid var(--line); transition: all .15s;
+  }
+  .btn.primary { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .btn.primary:hover { background: var(--accent); border-color: var(--accent); }
+  .btn:not(.primary):hover { border-color: var(--text); }
+
+  .chart-card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px;
+  }
+  .chart-card .label { font: 400 12px var(--mono); color: var(--faint); display: flex; justify-content: space-between; }
+  .chart-card .big { font: 400 40px/1.1 var(--serif); margin: 8px 0 2px; }
+  .chart-card .delta { font-size: 13px; color: var(--accent); font-weight: 500; }
+  .chart-card svg { width: 100%; height: auto; margin-top: 14px; display: block; }
+  .chart-card .line { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    stroke-dasharray: 600; stroke-dashoffset: 600; animation: draw 1.6s .3s ease-out forwards; }
+  .chart-card .area { fill: var(--accent-soft); opacity: 0; animation: fade .8s 1.2s forwards; }
+  .chart-card .grid { stroke: var(--line); stroke-width: 1; }
+  .chart-card .dot { fill: var(--accent); opacity: 0; animation: fade .3s 1.8s forwards; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @keyframes fade { to { opacity: 1; } }
+
+  /* Stats */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .stat { padding: 28px 0; }
+  .stat + .stat { padding-left: 28px; border-left: 1px solid var(--line); }
+  .stat b { display: block; font: 400 34px/1 var(--serif); margin-bottom: 6px; }
+  .stat span { font-size: 14px; color: var(--muted); }
+
+  /* Sections */
+  section.block { padding: 96px 0 0; }
+  .sec-head { display: grid; grid-template-columns: 220px 1fr; gap: 40px; margin-bottom: 40px; }
+  .sec-num { font: 400 13px var(--mono); color: var(--faint); padding-top: 10px; }
+  h2 { font: 400 34px/1.2 var(--serif); letter-spacing: -.01em; }
+  .sec-body { margin-left: 260px; }
+
+  .about p { font-size: 17px; color: var(--muted); margin-bottom: 16px; max-width: 40em; }
+  .about p strong { color: var(--text); font-weight: 500; }
+
+  /* Skills */
+  .skills { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px 40px; }
+  .skills h3 { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--faint); margin-bottom: 12px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    font-size: 14px; padding: 5px 12px; border-radius: 999px;
+    background: var(--surface); border: 1px solid var(--line);
+  }
+  .tag.strong { background: var(--accent-soft); border-color: transparent; color: var(--accent); font-weight: 500; }
+
+  /* Experience */
+  .job { display: grid; grid-template-columns: 220px 1fr; gap: 40px; padding: 28px 0; border-top: 1px solid var(--line); }
+  .job:last-child { border-bottom: 1px solid var(--line); }
+  .job .when { font: 400 13px var(--mono); color: var(--faint); padding-top: 4px; }
+  .job h3 { font-size: 18px; font-weight: 600; }
+  .job .org { color: var(--accent); font-weight: 500; }
+  .job ul { margin-top: 12px; padding-left: 18px; color: var(--muted); }
+  .job li { margin-bottom: 6px; }
+  .job li::marker { color: var(--faint); }
+
+  /* Projects */
+  .projects { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .project {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+    padding: 26px; display: flex; flex-direction: column; transition: transform .2s, border-color .2s;
+  }
+  .project:hover { transform: translateY(-3px); border-color: var(--accent); }
+  .project .ctx { font: 400 12px var(--mono); color: var(--faint); margin-bottom: 14px; }
+  .project .result { font-size: 14px; font-weight: 500; color: var(--accent); display: flex; gap: 8px; align-items: baseline; margin-bottom: 14px; }
+  .project .result::before { content: "↳"; }
+  .project h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+  .project p { color: var(--muted); font-size: 15px; margin-bottom: 18px; flex: 1; }
+  .project .tools { font: 400 12px var(--mono); color: var(--faint); margin-bottom: 16px; }
+  .project .links { display: flex; gap: 18px; font-size: 14px; font-weight: 500; }
+  .project .links a { text-decoration: none; color: var(--text); border-bottom: 1px solid var(--line); }
+  .project .links a:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Education */
+  .edu { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .edu-item { padding: 22px 0; border-top: 1px solid var(--line); }
+  .edu-item h3 { font-size: 16px; font-weight: 600; }
+  .edu-item p { color: var(--muted); font-size: 15px; }
+  .edu-item .when { font: 400 12px var(--mono); color: var(--faint); margin-top: 4px; }
+
+  /* Contact */
+  .contact {
+    margin: 112px 0 0; padding: 64px; border-radius: 18px;
+    background: var(--surface); border: 1px solid var(--line); text-align: center;
+  }
+  .contact h2 { font-size: clamp(30px, 4vw, 42px); margin-bottom: 12px; }
+  .contact p { color: var(--muted); max-width: 30em; margin: 0 auto 28px; }
+  .contact .actions { justify-content: center; }
+
+  footer { padding: 40px 0; color: var(--faint); font-size: 13px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  footer a { text-decoration: none; }
+  footer a:hover { color: var(--text); }
+  .socials { display: flex; gap: 20px; }
+
+  /* Reveal */
+  .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .chart-card .line, .chart-card .area, .chart-card .dot { animation: none; stroke-dashoffset: 0; opacity: 1; }
+  }
+
+  /* Responsive */
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr; padding: 56px 0 48px; gap: 40px; }
+    .sec-head, .job { grid-template-columns: 1fr; gap: 8px; }
+    .sec-body { margin-left: 0; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .stat:nth-child(3) { padding-left: 0; border-left: 0; }
+    .stat:nth-child(n+3) { border-top: 1px solid var(--line); }
+    .skills, .projects, .edu { grid-template-columns: 1fr; }
+    section.block { padding-top: 72px; }
+    .contact { padding: 44px 24px; margin-top: 80px; }
+  }
+  @media (max-width: 720px) {
+    .wrap { padding: 0 16px; }
+    .menu-btn { display: block; }
+    .nav ul.links-list {
+      display: none; position: absolute; top: 64px; left: 0; right: 0;
+      flex-direction: column; gap: 0; background: var(--bg); border-bottom: 1px solid var(--line); padding: 8px 16px 16px;
+    }
+    .nav ul.links-list.open { display: flex; }
+    .nav ul.links-list li { width: 100%; }
+    .nav ul.links-list a { display: block; padding: 12px 0; font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a href="#top" class="logo">Rajan Panchal<span>.</span></a>
+    <nav style="display:flex;align-items:center;gap:16px">
+      <ul class="links-list" id="links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button class="theme-btn" id="themeBtn" aria-label="Toggle dark mode">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <div class="eyebrow">Data Analyst · Vancouver, Canada</div>
+      <h1>I turn complex data into <em>clear decisions.</em></h1>
+      <p class="lede">I'm Rajan, a data analyst who works with Power BI, SQL, Python and Azure. I build dashboards, data models and pipelines for healthcare, community programs and business teams.</p>
+      <div class="actions">
+        <a href="#work" class="btn primary">See my work
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="resume.pdf" class="btn" download>Download resume</a>
+      </div>
+    </div>
+
+    <div class="chart-card" aria-hidden="true">
+      <div class="label"><span>query_optimization.sql</span><span>Capgemini</span></div>
+      <div class="big">−40%</div>
+      <div class="delta">data extraction time after SQL tuning</div>
+      <svg viewBox="0 0 300 120">
+        <line class="grid" x1="0" y1="30" x2="300" y2="30"/>
+        <line class="grid" x1="0" y1="65" x2="300" y2="65"/>
+        <line class="grid" x1="0" y1="100" x2="300" y2="100"/>
+        <path class="area" d="M5,22 L45,26 L85,24 L125,40 L165,48 L205,62 L245,66 L295,72 L295,110 L5,110 Z"/>
+        <path class="line" d="M5,22 L45,26 L85,24 L125,40 L165,48 L205,62 L245,66 L295,72"/>
+        <circle class="dot" cx="295" cy="72" r="4"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats reveal">
+    <div class="stat"><b>3+</b><span>Years in data &amp; BI</span></div>
+    <div class="stat"><b>3</b><span>Organizations</span></div>
+    <div class="stat"><b>40%</b><span>Faster data extraction</span></div>
+    <div class="stat"><b>M.S.</b><span>Information Systems</span></div>
+  </div>
+
+  <!-- ABOUT -->
+  <section class="block reveal" id="about">
+    <div class="sec-head">
+      <div class="sec-num">01 / About</div>
+      <h2>From raw sources to <em>trusted</em> reporting.</h2>
+    </div>
+    <div class="sec-body about">
+      <p>I'm a <strong>data analyst</strong> who works on the whole path, from pulling and cleaning messy multi-source data to designing the dashboards that leaders use to make decisions.</p>
+      <p>My recent work is in <strong>healthcare and Indigenous community programs</strong>. That includes Canadian hospital data such as DAD and NACRS, where accuracy, data quality and privacy really matter. Before that, I spent two years at <strong>Capgemini</strong> building self-serve Power BI and SAP BI reporting for operations, sales and finance teams.</p>
+      <p>I like turning vague questions into clear KPI definitions, then delivering reports that are reliable, well documented and easy for non-technical users to understand.</p>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="block reveal" id="skills">
+    <div class="sec-head">
+      <div class="sec-num">02 / Skills</div>
+      <h2>Toolkit</h2>
+    </div>
+    <div class="sec-body skills">
+      <div>
+        <h3>Languages</h3>
+        <div class="tags"><span class="tag strong">SQL</span><span class="tag strong">Python</span><span class="tag strong">DAX</span><span class="tag">Power Query</span><span class="tag">PL/SQL</span><span class="tag">SAS</span></div>
+      </div>
+      <div>
+        <h3>BI &amp; Visualization</h3>
+        <div class="tags"><span class="tag strong">Power BI</span><span class="tag">SAP BI</span><span class="tag">Excel</span><span class="tag">Tableau (familiar)</span><span class="tag">Looker (familiar)</span></div>
+      </div>
+      <div>
+        <h3>Cloud &amp; Data Engineering</h3>
+        <div class="tags"><span class="tag strong">Azure Data Factory</span><span class="tag strong">Databricks</span><span class="tag">Microsoft Fabric</span><span class="tag">Microsoft Azure</span><span class="tag">SAP BW</span><span class="tag">SAP HANA</span><span class="tag">Oracle SQL Developer</span></div>
+      </div>
+      <div>
+        <h3>Analytics &amp; Data Quality</h3>
+        <div class="tags"><span class="tag">Data Modeling</span><span class="tag">KPI Reporting</span><span class="tag">Metric Definitions</span><span class="tag">Data Validation</span><span class="tag">Data Mapping</span><span class="tag">Reporting Automation</span><span class="tag">Root Cause Analysis</span></div>
+      </div>
+      <div>
+        <h3>Dashboard Design</h3>
+        <div class="tags"><span class="tag">Self-Serve Analytics</span><span class="tag">KPI Layouts</span><span class="tag">Wireframes &amp; Mockups</span><span class="tag">Interactive Reporting</span></div>
+      </div>
+      <div>
+        <h3>Business &amp; Collaboration</h3>
+        <div class="tags"><span class="tag">Requirements Gathering</span><span class="tag">Stakeholder Collaboration</span><span class="tag">Business Analysis</span><span class="tag">Technical Documentation</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="block reveal" id="experience">
+    <div class="sec-head">
+      <div class="sec-num">03 / Experience</div>
+      <h2>Where I've worked</h2>
+    </div>
+    <div>
+      <article class="job">
+        <div class="when">Sep 2026 — Present</div>
+        <div>
+          <h3>Analyst · <span class="org">Nchkay Development</span></h3>
+          <ul>
+            <li>Write complex SQL and Python to extract, validate and analyze large, multi-source Indigenous health and community program datasets, automating recurring reports.</li>
+            <li>Design Power BI dashboards and data models (DAX, Power Query) that give program and community leaders clear views of KPIs, trends and service gaps.</li>
+            <li>Build and maintain ETL pipelines in Azure Data Factory, improving data ingestion and reliability for reporting.</li>
+            <li>Apply data quality and governance practices to sensitive data: reconciling sources, documenting validation rules and ensuring privacy.</li>
+            <li>Partner with stakeholders to define KPIs and turn findings into clear, culturally relevant recommendations.</li>
+          </ul>
+        </div>
+      </article>
+      <article class="job">
+        <div class="when">Mar 2025 — Sep 2026</div>
+        <div>
+          <h3>Data Analyst · <span class="org">eHealth</span></h3>
+          <ul>
+            <li>Built user-focused Power BI dashboards, using Power Query, DAX and data modeling, for healthcare KPI monitoring, trend analysis and operational decisions.</li>
+            <li>Supported reporting on Canadian healthcare data (DAD and NACRS), including data mapping, field comparison, validation and testing.</li>
+            <li>Performed SQL-based extraction, profiling and validation across healthcare sources to deliver accurate, reliable datasets.</li>
+            <li>Developed Azure Data Factory pipelines with SQL and Python for data ingestion, transformation, validation and reporting automation.</li>
+            <li>Troubleshot dashboard and data quality issues through root cause analysis, and maintained metric definitions, data mapping files and support documentation.</li>
+          </ul>
+        </div>
+      </article>
+      <article class="job">
+        <div class="when">Jan 2021 — Dec 2022</div>
+        <div>
+          <h3>Analyst · <span class="org">Capgemini</span></h3>
+          <ul>
+            <li>Optimized SQL queries to improve data extraction efficiency by <strong>40%</strong>, speeding up reporting and dashboard performance.</li>
+            <li>Designed Power BI and SAP BI dashboards that let business users do self-service analytics across operations, sales and finance.</li>
+            <li>Used SQL for deep-dive analysis to identify trends and give stakeholders practical recommendations.</li>
+            <li>Supported data workflows across SAP BI, SAP BW, SAP HANA and SQL to keep data available and reporting reliable.</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- SELECTED WORK -->
+  <section class="block reveal" id="work">
+    <div class="sec-head">
+      <div class="sec-num">04 / Selected work</div>
+      <h2>What I've built</h2>
+    </div>
+    <div class="projects">
+      <article class="project">
+        <div class="ctx">Nchkay Development · 2026</div>
+        <h3>Community Program Analytics</h3>
+        <p>Power BI dashboards and data models that bring several Indigenous health and community program datasets into one view of KPIs, trends and service gaps.</p>
+        <div class="result">Recurring reports automated, with less manual effort</div>
+        <div class="tools">Power BI · DAX · Power Query · SQL · Python</div>
+      </article>
+      <article class="project">
+        <div class="ctx">eHealth · 2025 – 2026</div>
+        <h3>Healthcare Reporting on DAD &amp; NACRS</h3>
+        <p>Mapped, compared and validated hospital and ambulatory care data structures, then turned them into tested, documented datasets and dashboards.</p>
+        <div class="result">Reliable datasets for healthcare KPI reporting</div>
+        <div class="tools">SQL · Power BI · Data Mapping · Validation</div>
+      </article>
+      <article class="project">
+        <div class="ctx">eHealth &amp; Nchkay · 2025 – present</div>
+        <h3>Azure ETL Pipelines</h3>
+        <p>Azure Data Factory pipelines for data ingestion, transformation and validation, built to feed Power BI reliably without manual data preparation.</p>
+        <div class="result">More reliable data movement into reporting</div>
+        <div class="tools">Azure Data Factory · SQL · Python</div>
+      </article>
+      <article class="project">
+        <div class="ctx">Capgemini · 2021 – 2022</div>
+        <h3>Self-Serve BI &amp; SQL Optimization</h3>
+        <p>Rebuilt slow queries and designed Power BI and SAP BI dashboards so operations, sales and finance teams could answer their own questions.</p>
+        <div class="result">40% faster data extraction</div>
+        <div class="tools">SQL · Power BI · SAP BI · SAP HANA</div>
+      </article>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section class="block reveal" id="education">
+    <div class="sec-head">
+      <div class="sec-num">05 / Education</div>
+      <h2>Education &amp; certifications</h2>
+    </div>
+    <div class="edu">
+      <div class="edu-item">
+        <h3>M.S., Information Systems</h3>
+        <p>Northeastern University</p>
+        <div class="when">2023 — 2024</div>
+      </div>
+      <div class="edu-item">
+        <h3>B.Tech, Computer Science &amp; Engineering</h3>
+        <p>Parul University</p>
+        <div class="when">2016 — 2020</div>
+      </div>
+      <div class="edu-item">
+        <h3>Databricks Certified Data Engineer Associate</h3>
+        <p>Databricks</p>
+        <div class="when">2025</div>
+      </div>
+      <div class="edu-item">
+        <h3>Data Analyst Associate</h3>
+        <p>DataCamp</p>
+        <div class="when">2024</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact reveal" id="contact">
+    <h2>Let's talk data.</h2>
+    <p>I'm open to conversations about data analyst and BI roles. If you think I'd be a good fit for your team, I'd love to hear from you.</p>
+    <div class="actions">
+      <a href="mailto:rajan2499@gmail.com" class="btn primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+        rajan2499@gmail.com
+      </a>
+      <a href="https://www.linkedin.com/in/YOUR-LINKEDIN" class="btn" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="resume.pdf" class="btn" download>Resume (PDF)</a>
+    </div>
+  </section>
+
+  <footer>
+    <span>© <span id="yr"></span> Rajan Panchal · Vancouver, Canada</span>
+    <div class="socials">
+      <a href="mailto:rajan2499@gmail.com">Email</a>
+      <a href="https://www.linkedin.com/in/YOUR-LINKEDIN" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </footer>
+</main>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // Sticky nav border
+  const nav = document.getElementById('nav');
+  addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 8), { passive: true });
+
+  // Mobile menu
+  const links = document.getElementById('links');
+  document.getElementById('menuBtn').onclick = () => links.classList.toggle('open');
+  links.querySelectorAll('a').forEach(a => a.onclick = () => links.classList.remove('open'));
+
+  // Theme toggle (remembered per browser)
+  const root = document.documentElement;
+  try { const t = localStorage.getItem('theme'); if (t) root.dataset.theme = t; } catch (e) {}
+  document.getElementById('themeBtn').onclick = () => {
+    const dark = root.dataset.theme
+      ? root.dataset.theme === 'dark'
+      : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = dark ? 'light' : 'dark';
+    try { localStorage.setItem('theme', root.dataset.theme); } catch (e) {}
+  };
+
+  // Reveal on scroll
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  }), { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
